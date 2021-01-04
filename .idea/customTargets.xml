@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CLionExternalBuildManager">
+    <target id="b27fdbaa-8ee2-4356-b4af-1bc47c2a262e" name="Unnamed" defaultType="TOOL">
+      <configuration id="1d8fc5d6-9d84-41a0-a1be-5dd03f67fb6f" name="Unnamed" />
+    </target>
+    <target id="7cf2216c-6aa8-4e0f-962c-0d4765fe307f" name="clientmake" defaultType="TOOL">
+      <configuration id="37791a91-24da-418b-a12f-921ec1e39685" name="clientmake">
+        <build type="TOOL">
+          <tool actionId="Tool_External Tools_makefileclient" />
+        </build>
+      </configuration>
+    </target>
+  </component>
+</project>
