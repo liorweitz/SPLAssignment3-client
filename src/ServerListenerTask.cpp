@@ -1,8 +1,8 @@
-#include <serverListenerTask.h>
+#include <ServerListenerTask.h>
 
-serverListenerTask::serverListenerTask(ConnectionHandler& handler): handler_(handler), answer(), token(){}
+ServerListenerTask::ServerListenerTask(ConnectionHandler& handler): handler_(handler), answer(), token(){}
 
-void serverListenerTask::operator()(){
+void ServerListenerTask::operator()(){
     while (1) {
         if (!handler_.getLine(answer)) {
             std::cout << "Disconnected. Exiting...\n" << std::endl;

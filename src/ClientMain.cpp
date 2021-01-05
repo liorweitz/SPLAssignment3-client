@@ -1,5 +1,5 @@
-#include <connectionHandler.h>
-#include <serverListenerTask.h>
+#include <ConnectionHandler.h>
+#include <ServerListenerTask.h>
 #include <stdlib.h>
 #include <thread>
 
@@ -18,7 +18,7 @@ int main (int argc, char *argv[]) {
         std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
         return 1;
     }
-    serverListenerTask server_listener_task(connectionHandler);
+    ServerListenerTask server_listener_task(connectionHandler);
     std::thread th(std::ref(server_listener_task));
 	
 	//From here we will see the rest of the ehco client implementation:

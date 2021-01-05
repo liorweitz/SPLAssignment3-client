@@ -1,19 +1,19 @@
 #ifndef CLIENT_SERVERLISTENERTASK_H
 #define CLIENT_SERVERLISTENERTASK_H
 
-#include <connectionHandler.h>
+#include <ConnectionHandler.h>
 #include <string>
 #include <sstream>
 
 class ConnectionHandler;
 
-class serverListenerTask{
+class ServerListenerTask{
 private:
     ConnectionHandler& handler_;
     std::string answer;
     std::string token;
 public:
-    serverListenerTask(ConnectionHandler& handler);
+    ServerListenerTask(ConnectionHandler& handler);
     void operator()();
 };
 
