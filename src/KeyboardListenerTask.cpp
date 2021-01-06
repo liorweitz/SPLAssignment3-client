@@ -1,23 +1,31 @@
 #include <KeyboardListenerTask.h>
 
-KeyboardListenerTask::KeyboardListenerTask(ConnectionHandler& handler): handler_(handler),shutdown(false){}
+KeyboardListenerTask::KeyboardListenerTask(ConnectionHandler& handler): handler_(handler),logoutSent(false){}
 
-void KeyboardListenerTask::operator()(std::future<int> futureObj) {
+void KeyboardListenerTask::operator()(std::future<bool> futureObj) {
     while (1) {
         const short bufsize=1024;
         char buf[bufsize];
-        if (shutdown==false) {
-            std::cin.getline(buf, bufsize);
-        }
+        std::cin.getline(buf, bufsize);
         std::string line(buf);
         std::string toSend = encode(line);
         std::cout << toSend << std::endl;
-//        int len = line.length();
         if (!handler_.sendLine(toSend)) {
             std::cout << "Disconnected. Exiting...keyboard\n" << std::endl;
             break;
         }
+        if (line.compare("LOGOUT")==0){
+            int result=futureObj.get();
+            if (result==true){
+                std::cout << "terminating!!!!!" << std::endl;
+                std::terminate();
+            }
+        }
     }
+}
+
+void KeyboardListenerTask::goBusy(){
+
 }
 
 std::string KeyboardListenerTask::encode(std::string line){
@@ -48,7 +56,7 @@ std::string KeyboardListenerTask::encode(std::string line){
         }
     }
     else if(token.compare("LOGOUT")==0){
-        shutdown=true;
+        logoutSent=true;
         toSend+="04";
     }
     else if(token.compare("COURSEREG")==0){

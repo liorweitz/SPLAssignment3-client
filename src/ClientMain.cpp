@@ -13,6 +13,7 @@ int main (int argc, char *argv[]) {
         return -1;
     }
 
+//    bool logoutSent=false;
     std::string host = argv[1];
     short port = atoi(argv[2]);
     
@@ -22,60 +23,41 @@ int main (int argc, char *argv[]) {
         return 1;
     }
     //creates exit signal promised object to pass to KeyboardListenerTask thread to inform it to terminate.
-    std::promise<int> exitSignal;
-    std::future<int> futureObj=exitSignal.get_future();
+    std::promise<bool> exitSignal;
+    std::future<bool> futureObj=exitSignal.get_future();
 
 
     KeyboardListenerTask keyboard_listener_task(connectionHandler);
-    ServerListenerTask server_listener_task(connectionHandler);
+//    ServerListenerTask server_listener_task(connectionHandler);
 
     std::thread th1(std::ref(keyboard_listener_task),std::move(futureObj));
-    std::thread th2(std::ref(server_listener_task));
+//    std::thread th2(std::ref(server_listener_task));
 
-    th2.join();
-    exitSignal.set_value(1);
-    th1.join();
+    while (1) {
+        std::string answer;
+        if ((!connectionHandler.getLine(answer))) {
+            std::cout << "Disconnected. Exiting... server\n" << std::endl;
+            break;
+        }
+        int len = answer.length();
+        answer.resize(len - 1);
+        std::stringstream ss(answer);
+        std::string token;
+        while (std::getline(ss, token, '|')) {
+            if (token.compare("ACK 4")==0){
+                exitSignal.set_value(true);
+                th1.join();
+                std::terminate();
+            }
+            else if(token.compare("ERR 4")==0){
+                exitSignal.set_value(false);
+            }
+            std::cerr << token << std::endl;
+        }
+    }
+
 
 	
-	//From here we will see the rest of the ehco client implementation:
-//    while (1) {
-//        const short bufsize = 1024;
-//        char buf[bufsize];
-//        std::cin.getline(buf, bufsize);
-//		std::string line(buf);
-//		int len=line.length();
-//        if (!connectionHandler.sendLine(line)) {
-//            std::cout << "Disconnected. Exiting...\n" << std::endl;
-//            break;
-//        }
-		// connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
-//        std::cout << "Sent " << len+1 << " bytes to server" << std::endl;
-
- 
-        // We can use one of three options to read data from the server:
-        // 1. Read a fixed number of characters
-        // 2. Read a line (up to the newline character using the getline() buffered reader
-        // 3. Read up to the null character
-//        std::string answer;
-        // Get back an answer: by using the expected number of bytes (len bytes + newline delimiter)
-        // We could also use: connectionHandler.getline(answer) and then get the answer without the newline char at the end
-//        std::cout << "want to read answer" << std::endl;
-//        if (!connectionHandler.getLine(answer)) {
-//            std::cout << "Disconnected. Exiting...\n" << std::endl;
-//            break;
-//        }
-        
-//		len=answer.length();
-		// A C string must end with a 0 char delimiter.  When we filled the answer buffer from the socket
-		// we filled up to the \n char - we must make sure now that a 0 char is also present. So we truncate last character.
-//        answer.resize(len-1);
-//        print(answer);
-//        std::cout << answer << std::endl;
-//        std::cout << "Reply: " << answer << " " << len << " bytes " << std::endl << std::endl;
-//        if (answer == "bye") {
-//            std::cout << "Exiting...\n" << std::endl;
-//            break;
-//        }
 
     return 0;
 }

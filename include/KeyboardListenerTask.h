@@ -10,12 +10,14 @@
 class KeyboardListenerTask{
 private:
     ConnectionHandler& handler_;
-    bool shutdown;
+    bool logoutSent;
+    void parse();
+    void goBusy();
 public:
     KeyboardListenerTask(ConnectionHandler& handler);
-    void operator()( std::future<int> futureObj);
+    void operator()( std::future<bool> futureObj);
     std::string encode(std::string);
-    void parse();
+
 };
 
 #endif //CLIENT_KEYBOARDLISTENERTASK_H
