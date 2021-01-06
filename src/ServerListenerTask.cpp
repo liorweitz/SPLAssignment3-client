@@ -1,11 +1,12 @@
 #include <ServerListenerTask.h>
 
-ServerListenerTask::ServerListenerTask(ConnectionHandler& handler): handler_(handler), answer(), token(){}
+ServerListenerTask::ServerListenerTask(ConnectionHandler& handler): handler_(handler), shutdown(false){}
 
 void ServerListenerTask::operator()(){
     while (1) {
-        if (!handler_.getLine(answer)) {
-            std::cout << "Disconnected. Exiting...\n" << std::endl;
+        std::string answer;
+        if ((!handler_.getLine(answer)) | (shutdown==true)) {
+            std::cout << "Disconnected. Exiting... server\n" << std::endl;
             break;
         }
         int len = answer.length();
@@ -13,6 +14,9 @@ void ServerListenerTask::operator()(){
         std::stringstream ss(answer);
         std::string token;
         while (std::getline(ss, token, '|')) {
+//            if (token.compare("ACK 4")){
+//                shutdown=true;
+//            }
             std::cerr << token << std::endl;
         }
     }

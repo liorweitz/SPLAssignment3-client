@@ -10,8 +10,8 @@ class ConnectionHandler;
 class ServerListenerTask{
 private:
     ConnectionHandler& handler_;
-    std::string answer;
-    std::string token;
+//    std::string answer;
+    bool shutdown;
 public:
     ServerListenerTask(ConnectionHandler& handler);
     void operator()();

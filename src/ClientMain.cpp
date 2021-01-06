@@ -1,7 +1,10 @@
 #include <ConnectionHandler.h>
 #include <ServerListenerTask.h>
+#include <KeyboardListenerTask.h>
 #include <stdlib.h>
 #include <thread>
+#include <future>
+
 
 
 int main (int argc, char *argv[]) {
@@ -18,23 +21,35 @@ int main (int argc, char *argv[]) {
         std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
         return 1;
     }
+    //creates exit signal promised object to pass to KeyboardListenerTask thread to inform it to terminate.
+    std::promise<int> exitSignal;
+    std::future<int> futureObj=exitSignal.get_future();
+
+
+    KeyboardListenerTask keyboard_listener_task(connectionHandler);
     ServerListenerTask server_listener_task(connectionHandler);
-    std::thread th(std::ref(server_listener_task));
+
+    std::thread th1(std::ref(keyboard_listener_task),std::move(futureObj));
+    std::thread th2(std::ref(server_listener_task));
+
+    th2.join();
+    exitSignal.set_value(1);
+    th1.join();
+
 	
 	//From here we will see the rest of the ehco client implementation:
-    while (1) {
-        const short bufsize = 1024;
-        char buf[bufsize];
-        std::cin.getline(buf, bufsize);
-//        makeCommand(buf);
-		std::string line(buf);
-		int len=line.length();
-        if (!connectionHandler.sendLine(line)) {
-            std::cout << "Disconnected. Exiting...\n" << std::endl;
-            break;
-        }
+//    while (1) {
+//        const short bufsize = 1024;
+//        char buf[bufsize];
+//        std::cin.getline(buf, bufsize);
+//		std::string line(buf);
+//		int len=line.length();
+//        if (!connectionHandler.sendLine(line)) {
+//            std::cout << "Disconnected. Exiting...\n" << std::endl;
+//            break;
+//        }
 		// connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
-        std::cout << "Sent " << len+1 << " bytes to server" << std::endl;
+//        std::cout << "Sent " << len+1 << " bytes to server" << std::endl;
 
  
         // We can use one of three options to read data from the server:
@@ -61,6 +76,6 @@ int main (int argc, char *argv[]) {
 //            std::cout << "Exiting...\n" << std::endl;
 //            break;
 //        }
-    }
+
     return 0;
 }
