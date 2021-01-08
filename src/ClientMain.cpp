@@ -36,33 +36,18 @@ int main (int argc, char *argv[]) {
     while (1) {
         std::string answer;
         if ((!connectionHandler.getLine(answer))) {
-            std::cout << "Disconnected. Exiting... server\n" << std::endl;
+            std::cout << "getLine error\n" << std::endl;
             break;
         }
-//        int len = answer.length();
-//        std::cout << answer<< std::endl;
-//        answer.resize(len - 1);
         std::cout << answer<< std::endl;
-
-        //printing the server's answer
-//        std::string firstPart=answer.substr(0,5);
-//        std::cout << firstPart<< std::endl;
-//        if (firstPart.compare("ACK 4")==0){
-//            exitSignal.set_value(true);
-//            th1.join();
-//            std::terminate();
-//        }
-//        else if(firstPart.compare("ERR 4")==0){
-//            exitSignal.set_value(false);
-//        }
-//        if (firstPart.substr(0,2).compare("ERR")==1) {
-//            std::string secondPart = answer.substr(5, answer.size());
-//            std::stringstream ss(secondPart);
-//            std::string token;
-//            while (std::getline(ss, token, '|')) {
-//                std::cout << token << std::endl;
-//            }
-//        }
+        if (answer.compare("ACK 4")==0){
+            exitSignal.set_value(true);
+            th1.join();
+            break;
+        }
+        else if(answer.compare("ERR 4")==0){
+            exitSignal.set_value(false);
+        }
     }
     return 0;
 }

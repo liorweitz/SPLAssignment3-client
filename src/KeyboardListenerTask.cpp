@@ -9,16 +9,14 @@ void KeyboardListenerTask::operator()(std::future<bool> futureObj) {
         std::cin.getline(buf, bufsize);
         std::string line(buf);
         std::string toSend = encode(line);
-        std::cout << toSend << std::endl;
         if (!handler_.sendLine(toSend)) {
-            std::cout << "Disconnected. Exiting...keyboard\n" << std::endl;
+            std::cout << "sendLine error\n" << std::endl;
             break;
         }
         if (line.compare("LOGOUT")==0){
             int result=futureObj.get();
             if (result==true){
-                std::cout << "terminating!!!!!" << std::endl;
-                std::terminate();
+                break;
             }
         }
     }
@@ -96,8 +94,8 @@ std::string KeyboardListenerTask::encode(std::string line){
         toSend.append(1,arr[0]);
         toSend.append(1,arr[1]);
         std::getline(ss, token, ' ');
-        toSend+=token;
-        toSend+="\0";
+        toSend.append(token);
+        toSend.append(1,'\0');
     }
     else if(token.compare("ISREGISTERED")==0){
         shortToBytes(9, arr);
@@ -133,7 +131,3 @@ void KeyboardListenerTask::shortToBytes(short num, char* bytesArr)
     bytesArr[0] = ((num >> 8) & 0xFF);
     bytesArr[1] = (num & 0xFF);
 }
-
-//int stringToInt(std::string str){
-//
-//}
