@@ -4,7 +4,6 @@
 CMakeFiles/client.dir/src/ClientMain.cpp.o
  ../include/ConnectionHandler.h
  ../include/KeyboardListenerTask.h
- ../include/ServerListenerTask.h
  /home/spl211/CLionProjects/client/src/ClientMain.cpp
 CMakeFiles/client.dir/src/ConnectionHandler.cpp.o
  ../include/ConnectionHandler.h

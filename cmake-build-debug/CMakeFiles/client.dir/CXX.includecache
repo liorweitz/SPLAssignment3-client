@@ -24,18 +24,8 @@ sstream
 future
 -
 
-../include/ServerListenerTask.h
-ConnectionHandler.h
--
-string
--
-sstream
--
-
 /home/spl211/CLionProjects/client/src/ClientMain.cpp
 ConnectionHandler.h
--
-ServerListenerTask.h
 -
 KeyboardListenerTask.h
 -
@@ -44,9 +34,5 @@ stdlib.h
 thread
 -
 future
--
-
-/home/spl211/CLionProjects/client/src/KeyboardListenerTask.cpp
-KeyboardListenerTask.h
 -
 
