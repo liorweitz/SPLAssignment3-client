@@ -9,7 +9,7 @@
 
 int main (int argc, char *argv[]) {
     if (argc < 3) {
-        std::cerr << "Usage: " << argv[0] << " host port" << std::endl;
+        std::cout << "Usage: " << argv[0] << " host port" << std::endl;
         return -1;
     }
 
@@ -19,7 +19,7 @@ int main (int argc, char *argv[]) {
     
     ConnectionHandler connectionHandler(host, port);
     if (!connectionHandler.connect()) {
-        std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
+        std::cout << "Cannot connect to " << host << ":" << port << std::endl;
         return 1;
     }
     //creates exit signal promised object to pass to KeyboardListenerTask thread to inform it to terminate.
@@ -39,25 +39,30 @@ int main (int argc, char *argv[]) {
             std::cout << "Disconnected. Exiting... server\n" << std::endl;
             break;
         }
-        int len = answer.length();
-        answer.resize(len - 1);
-        std::stringstream ss(answer);
-        std::string token;
-        while (std::getline(ss, token, '|')) {
-            if (token.compare("ACK 4")==0){
-                exitSignal.set_value(true);
-                th1.join();
-                std::terminate();
-            }
-            else if(token.compare("ERR 4")==0){
-                exitSignal.set_value(false);
-            }
-            std::cerr << token << std::endl;
-        }
+//        int len = answer.length();
+//        std::cout << answer<< std::endl;
+//        answer.resize(len - 1);
+        std::cout << answer<< std::endl;
+
+        //printing the server's answer
+//        std::string firstPart=answer.substr(0,5);
+//        std::cout << firstPart<< std::endl;
+//        if (firstPart.compare("ACK 4")==0){
+//            exitSignal.set_value(true);
+//            th1.join();
+//            std::terminate();
+//        }
+//        else if(firstPart.compare("ERR 4")==0){
+//            exitSignal.set_value(false);
+//        }
+//        if (firstPart.substr(0,2).compare("ERR")==1) {
+//            std::string secondPart = answer.substr(5, answer.size());
+//            std::stringstream ss(secondPart);
+//            std::string token;
+//            while (std::getline(ss, token, '|')) {
+//                std::cout << token << std::endl;
+//            }
+//        }
     }
-
-
-	
-
     return 0;
 }

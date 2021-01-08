@@ -12,7 +12,9 @@ private:
     ConnectionHandler& handler_;
     bool logoutSent;
     void parse();
-    void goBusy();
+    short bytesToShort(char* bytesArr);
+    void shortToBytes(short num, char* bytesArr);
+//    int stringToInt(std::string);
 public:
     KeyboardListenerTask(ConnectionHandler& handler);
     void operator()( std::future<bool> futureObj);

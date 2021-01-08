@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/ConnectionHandler.h
+string
+-
+iostream
+-
+boost/asio.hpp
+-
+
+../include/KeyboardListenerTask.h
+ConnectionHandler.h
+-
+string
+-
+sstream
+-
+future
+-
+
+/home/spl211/CLionProjects/client/src/KeyboardListenerTask.cpp
+KeyboardListenerTask.h
+-
+

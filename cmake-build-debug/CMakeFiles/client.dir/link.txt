@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11 -pthread -g   CMakeFiles/client.dir/src/ClientMain.cpp.o CMakeFiles/client.dir/src/ConnectionHandler.cpp.o CMakeFiles/client.dir/src/KeyboardListenerTask.cpp.o  -o client  /usr/lib/x86_64-linux-gnu/libboost_filesystem.so /usr/lib/x86_64-linux-gnu/libboost_regex.so /usr/lib/x86_64-linux-gnu/libboost_system.so 
